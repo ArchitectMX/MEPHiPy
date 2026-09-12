@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 class BankAccount:
     def __init__(self, user):
         self.user = user
@@ -8,17 +11,32 @@ class BankAccount:
     def balance(self):
         return self._balance
 
-    def deposit(self):
-        pass
+    def deposit(self, money):
+        if money <= 0:
+            self._log.append(f"{datetime.now().strftime('%d.%m.%Y %H:%M:%S')} deposit failed: invalid amount {money}")
+            raise ValueError("amount must be positive")
 
-    def withdraw(self):
-        pass
+        self._balance += money
+        self._log.append(f"{datetime.now().strftime('%d.%m.%Y %H:%M:%S')} deposit: {money}")
+
+
+    def withdraw(self, money):
+        if money <= 0:
+            self._log.append(f"{datetime.now().strftime('%d.%m.%Y %H:%M:%S')} withdrawal failed: invalid amount {money}")
+            raise ValueError("amount must be positive")
+
+        if money > self._balance:
+            self._log.append(f"{datetime.now().strftime('%d.%m.%Y %H:%M:%S')} withdrawal failed: insufficient funds ({money})")
+            raise ValueError("insufficient funds")
+
+        self._balance -= money
+        self._log.append(f"{datetime.now().strftime('%d.%m.%Y %H:%M:%S')} withdrawal: {money}")
 
     def get_balance(self):
         return self._balance
 
     def get_history(self):
-        pass
+        return self._log
 
 
 class SavingAccount(BankAccount):

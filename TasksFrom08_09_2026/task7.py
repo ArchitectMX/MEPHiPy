@@ -1,4 +1,4 @@
-from faker import Faker
+from faker import Faker # pyright: ignore[reportMissingImports]
 
 
 top_words: dict[str, int] = {}

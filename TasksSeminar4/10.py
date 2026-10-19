@@ -22,12 +22,9 @@ def withdraw(balance, amount):
     return balance - amount
 
 
-if __name__ == "__main__":
-    try:
-        balance = float(input("Текущий баланс: "))
-        amount = float(input("Сумма снятия: "))
-        print(f"Новый баланс: {withdraw(balance, amount):.2f}")
-    except BankError as error:
-        print(f"Ошибка: {error}")
-    except ValueError:
-        print("Ошибка: введите числа")
+try:
+    balance = float(input("Баланс: "))
+    amount = float(input("Сумма снятия: "))
+    print("Новый баланс:", withdraw(balance, amount))
+except (BankError, ValueError) as error:
+    print("Ошибка:", error)

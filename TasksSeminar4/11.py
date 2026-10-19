@@ -1,9 +1,10 @@
+from pathlib import Path
 import re
 
 
 def analyze_logs(file_path):
-    with open(file_path, encoding="utf-8") as file:
-        lines = [line.rstrip("\n") for line in file]
+    with open(file_path, encoding="utf-8") as f:
+        lines = [line.rstrip("\n") for line in f]
 
     user_ids = re.findall(r"\bUser\s+(\d+)\b", "\n".join(lines))
     error_lines = [line for line in lines if re.search(r"\bERROR\b", line)]
@@ -17,14 +18,11 @@ def analyze_logs(file_path):
     return user_ids, error_lines, error_user_ids
 
 
-if __name__ == "__main__":
-    path = input("Введите путь к файлу с логами: ")
-    try:
-        users, errors, error_users = analyze_logs(path)
-        print("Все идентификаторы пользователей:", users)
-        print("Строки с ERROR:")
-        for error in errors:
-            print(error)
-        print("Идентификаторы пользователей с ошибками:", error_users)
-    except (FileNotFoundError, PermissionError, OSError) as error:
-        print(f"Ошибка чтения файла: {error}")
+base = Path(__file__).resolve().parent
+try:
+    users, errors, error_users = analyze_logs(base / "users.log")
+    print("Все пользователи:", users)
+    print("Строки с ERROR:", *errors, sep="\n")
+    print("Пользователи с ошибками:", error_users)
+except (OSError, UnicodeError) as error:
+    print("Ошибка чтения:", error)

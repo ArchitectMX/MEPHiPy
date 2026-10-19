@@ -9,6 +9,7 @@ class Timer:
 
     def __exit__(self, exception_type, exception_value, traceback):
         elapsed_time = time.perf_counter() - self.start_time
+        self.elapsed = elapsed_time
         print(f"Время выполнения: {elapsed_time:.6f} секунд")
         return False
 
@@ -27,11 +28,7 @@ def some_function():
     return sum(range(1_000_000))
 
 
-if __name__ == "__main__":
-    print("Контекстный менеджер на основе класса:")
-    with Timer():
-        some_function()
-
-    print("Контекстный менеджер на основе contextmanager:")
-    with timer():
-        some_function()
+with Timer():
+    print(some_function())
+with timer():
+    print(some_function())
